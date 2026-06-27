@@ -51,18 +51,20 @@ export function SectionHeader({
   const subtitleClass = dark ? 'text-gray-400' : 'text-gray-500';
 
   return (
-    <div className={`max-w-3xl mb-16 space-y-4 ${alignClass} ${className}`}>
-      <ScrollReveal delay={0}>
-        <h2 className="text-xs font-bold tracking-widest uppercase text-electric-blue">{label}</h2>
+    <div className={`max-w-3xl mb-16 space-y-5 ${alignClass} ${className}`}>
+      <ScrollReveal delay={0} className={align === 'center' ? 'flex justify-center' : ''}>
+        <div className="section-tag">
+          <span className="text-[11px] font-semibold tracking-[0.25em] uppercase text-brand-light">{label}</span>
+        </div>
       </ScrollReveal>
       <ScrollReveal delay={0.1}>
-        <p className={`text-3xl sm:text-4xl font-extrabold tracking-tight leading-tight ${titleClass}`}>
+        <p className={`text-3xl sm:text-4xl font-bold tracking-tight leading-tight ${titleClass}`}>
           {title}
         </p>
       </ScrollReveal>
       {subtitle && (
         <ScrollReveal delay={0.2}>
-          <p className={`text-sm leading-relaxed ${subtitleClass}`}>{subtitle}</p>
+          <p className={`text-[15px] leading-relaxed ${subtitleClass}`}>{subtitle}</p>
         </ScrollReveal>
       )}
       {showLine && (
@@ -72,7 +74,7 @@ export function SectionHeader({
             whileInView={{ width: 48, opacity: 1 }}
             viewport={VIEWPORT}
             transition={{ duration: 0.8, delay: 0.3, ease: EASE }}
-            className="h-1 bg-electric-blue rounded-full mt-4"
+            className="section-divider mt-2"
           />
         </ScrollReveal>
       )}
