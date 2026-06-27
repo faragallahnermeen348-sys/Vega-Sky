@@ -9,3 +9,26 @@
   
   --font-sans: 'Inter', sans-serif;
 }
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+@keyframes gradient-shift {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+.animate-gradient {
+  animation: gradient-shift 6s ease infinite;
+}
+
+::selection {
+  background-color: color-mix(in srgb, var(--color-electric-blue) 30%, transparent);
+}

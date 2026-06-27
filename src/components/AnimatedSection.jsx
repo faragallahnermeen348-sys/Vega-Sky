@@ -1,0 +1,125 @@
+import { motion } from 'framer-motion';
+
+const EASE = [0.22, 1, 0.36, 1];
+const VIEWPORT = { once: true, amount: 0.15, margin: '0px 0px -80px 0px' };
+
+const directions = {
+  up: { hidden: { opacity: 0, y: 60 }, visible: { opacity: 1, y: 0 } },
+  down: { hidden: { opacity: 0, y: -40 }, visible: { opacity: 1, y: 0 } },
+  left: { hidden: { opacity: 0, x: -60 }, visible: { opacity: 1, x: 0 } },
+  right: { hidden: { opacity: 0, x: 60 }, visible: { opacity: 1, x: 0 } },
+  scale: { hidden: { opacity: 0, scale: 0.88 }, visible: { opacity: 1, scale: 1 } },
+  blur: { hidden: { opacity: 0, y: 40, filter: 'blur(8px)' }, visible: { opacity: 1, y: 0, filter: 'blur(0px)' } },
+};
+
+export function ScrollReveal({
+  children,
+  className = '',
+  direction = 'up',
+  delay = 0,
+  duration = 0.75,
+  as: Tag = 'div',
+}) {
+  const Component = motion[Tag] ?? motion.div;
+  const variant = directions[direction] ?? directions.up;
+
+  return (
+    <Component
+      className={className}
+      initial="hidden"
+      whileInView="visible"
+      viewport={VIEWPORT}
+      variants={variant}
+      transition={{ duration, delay, ease: EASE }}
+    >
+      {children}
+    </Component>
+  );
+}
+
+export function SectionHeader({
+  label,
+  title,
+  subtitle,
+  className = '',
+  align = 'center',
+  dark = false,
+  showLine = true,
+}) {
+  const alignClass = align === 'center' ? 'text-center mx-auto' : 'text-left';
+  const titleClass = dark ? 'text-white' : 'text-navy-dark';
+  const subtitleClass = dark ? 'text-gray-400' : 'text-gray-500';
+
+  return (
+    <div className={`max-w-3xl mb-16 space-y-4 ${alignClass} ${className}`}>
+      <ScrollReveal delay={0}>
+        <h2 className="text-xs font-bold tracking-widest uppercase text-electric-blue">{label}</h2>
+      </ScrollReveal>
+      <ScrollReveal delay={0.1}>
+        <p className={`text-3xl sm:text-4xl font-extrabold tracking-tight leading-tight ${titleClass}`}>
+          {title}
+        </p>
+      </ScrollReveal>
+      {subtitle && (
+        <ScrollReveal delay={0.2}>
+          <p className={`text-sm leading-relaxed ${subtitleClass}`}>{subtitle}</p>
+        </ScrollReveal>
+      )}
+      {showLine && (
+        <ScrollReveal delay={0.25} className={align === 'center' ? 'flex justify-center' : ''}>
+          <motion.div
+            initial={{ width: 0, opacity: 0 }}
+            whileInView={{ width: 48, opacity: 1 }}
+            viewport={VIEWPORT}
+            transition={{ duration: 0.8, delay: 0.3, ease: EASE }}
+            className="h-1 bg-electric-blue rounded-full mt-4"
+          />
+        </ScrollReveal>
+      )}
+    </div>
+  );
+}
+
+export default function AnimatedSection({ children, className = '', id }) {
+  return (
+    <section id={id} className={className}>
+      {children}
+    </section>
+  );
+}
+
+export function StaggerContainer({ children, className = '', stagger = 0.1, delay = 0 }) {
+  return (
+    <motion.div
+      className={className}
+      initial="hidden"
+      whileInView="visible"
+      viewport={VIEWPORT}
+      variants={{
+        hidden: {},
+        visible: { transition: { staggerChildren: stagger, delayChildren: delay } },
+      }}
+    >
+      {children}
+    </motion.div>
+  );
+}
+
+export function StaggerItem({ children, className = '', direction = 'up' }) {
+  const variant = directions[direction] ?? directions.up;
+
+  return (
+    <motion.div
+      className={className}
+      variants={{
+        hidden: variant.hidden,
+        visible: {
+          ...variant.visible,
+          transition: { duration: 0.65, ease: EASE },
+        },
+      }}
+    >
+      {children}
+    </motion.div>
+  );
+}
