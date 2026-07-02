@@ -5,6 +5,7 @@ import { useScrollSpy } from '../hooks/useScrollSpy';
 const NAV_LINKS = [
   { href: '#home', label: 'Home', id: 'home' },
   { href: '#about', label: 'About Us', id: 'about' },
+  { href: '#why-us', label: 'Why Us', id: 'why-us' },
   { href: '#services', label: 'Services', id: 'services' },
   { href: '#coverage', label: 'Coverage', id: 'coverage' },
   { href: '#gallery', label: 'Gallery', id: 'gallery' },
@@ -14,7 +15,7 @@ const NAV_LINKS = [
 export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
-  const activeId = useScrollSpy(['home', 'about', 'services', 'coverage', 'gallery', 'contact']);
+  const activeId = useScrollSpy(['home', 'about', 'why-us', 'services', 'coverage', 'gallery', 'contact']);
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 30);
@@ -28,13 +29,14 @@ export default function Navbar() {
   }, [menuOpen]);
 
   const closeMenu = () => setMenuOpen(false);
+  const menuTransition = { duration: 0.55, ease: [0.22, 1, 0.36, 1] };
 
   return (
     <>
       <motion.nav
         initial={{ y: -80, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+        transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1] }}
         className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
           isScrolled
             ? 'bg-navy-deep/95 backdrop-blur-xl py-3 shadow-lg shadow-black/20 border-b border-white/5'
@@ -64,6 +66,7 @@ export default function Navbar() {
                   <motion.span
                     layoutId="nav-underline"
                     className="absolute -bottom-0.5 left-0 right-0 h-0.5 bg-brand rounded-full"
+                    transition={menuTransition}
                   />
                 )}
               </a>
@@ -87,14 +90,17 @@ export default function Navbar() {
               <div className="w-5 flex flex-col gap-1.5">
                 <motion.span
                   animate={menuOpen ? { rotate: 45, y: 6 } : { rotate: 0, y: 0 }}
+                  transition={menuTransition}
                   className="block h-px w-full bg-white origin-center"
                 />
                 <motion.span
                   animate={menuOpen ? { opacity: 0 } : { opacity: 1 }}
+                  transition={menuTransition}
                   className="block h-px w-full bg-white"
                 />
                 <motion.span
                   animate={menuOpen ? { rotate: -45, y: -6 } : { rotate: 0, y: 0 }}
+                  transition={menuTransition}
                   className="block h-px w-full bg-white origin-center"
                 />
               </div>
@@ -109,6 +115,7 @@ export default function Navbar() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
+            transition={{ duration: 0.22 }}
             className="fixed inset-0 z-40 xl:hidden"
           >
             <div className="absolute inset-0 bg-navy-deep/95 backdrop-blur-xl" onClick={closeMenu} />
@@ -116,7 +123,7 @@ export default function Navbar() {
               initial={{ x: '100%' }}
               animate={{ x: 0 }}
               exit={{ x: '100%' }}
-              transition={{ type: 'spring', damping: 30, stiffness: 300 }}
+              transition={menuTransition}
               className="absolute right-0 top-0 bottom-0 w-full max-w-xs bg-navy border-l border-white/10 p-8 pt-24"
             >
               <div className="flex flex-col gap-1">
@@ -127,7 +134,7 @@ export default function Navbar() {
                     onClick={closeMenu}
                     initial={{ opacity: 0, x: 20 }}
                     animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: i * 0.06 }}
+                    transition={{ ...menuTransition, delay: i * 0.04 }}
                     className={`py-3 text-sm font-medium border-b border-white/5 ${
                       activeId === link.id ? 'text-brand-light' : 'text-gray-300'
                     }`}

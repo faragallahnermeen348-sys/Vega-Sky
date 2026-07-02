@@ -2,13 +2,17 @@
 @import "tailwindcss";
 
 @theme {
-  --color-navy-deep: #080d18;
-  --color-navy: #0f1a2e;
-  --color-navy-card: #141f35;
-  --color-brand: #2a8fd4;
-  --color-brand-light: #4db5e8;
-  --color-brand-dark: #1a6fb5;
-  --color-cream: #f5f0e8;
+  --color-navy-deep: #06111f;
+  --color-navy: #0a2035;
+  --color-navy-heading: #102d4c;
+  --color-navy-card: #0d263e;
+  --color-brand: #2f75b8;
+  --color-brand-light: #6ca8ff;
+  --color-brand-dark: #1d5f9d;
+  --color-ink-soft: #d8e4f2;
+  --color-mist: #93a8bd;
+  --color-panel-line: #1e4263;
+  --color-cream: #eef5ff;
 
   --font-sans: 'Inter', sans-serif;
   --font-serif: 'Playfair Display', serif;
@@ -16,6 +20,12 @@
 
 html {
   scroll-behavior: smooth;
+}
+
+html,
+body,
+#root {
+  min-height: 100%;
 }
 
 body {
@@ -26,10 +36,21 @@ body {
   overflow-x: hidden;
 }
 
+a,
+button,
+img {
+  -webkit-tap-highlight-color: transparent;
+}
+
+section {
+  scroll-margin-top: 88px;
+}
+
 .font-serif {
   font-family: var(--font-serif);
 }
 
+/* Dark sections */
 .btn-primary {
   background: linear-gradient(135deg, #1a6fb5 0%, #2a8fd4 50%, #1a6fb5 100%);
   background-size: 200% auto;
@@ -51,19 +72,14 @@ body {
   border-color: rgba(255, 255, 255, 0.6);
 }
 
-.hero-overlay {
+.hero-overlay,
+.site-overlay {
   background: linear-gradient(
     105deg,
-    rgba(8, 13, 24, 0.92) 0%,
-    rgba(8, 13, 24, 0.78) 45%,
-    rgba(8, 13, 24, 0.55) 100%
+    rgba(6, 17, 31, 0.95) 0%,
+    rgba(7, 31, 51, 0.86) 48%,
+    rgba(6, 58, 81, 0.68) 100%
   );
-}
-
-.section-tag {
-  display: flex;
-  align-items: center;
-  gap: 12px;
 }
 
 .section-tag::before {
@@ -75,6 +91,12 @@ body {
   flex-shrink: 0;
 }
 
+.section-tag {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
 .section-divider {
   width: 48px;
   height: 2px;
@@ -82,15 +104,125 @@ body {
 }
 
 .card-glass {
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(13, 38, 62, 0.76);
+  border: 1px solid rgba(108, 168, 255, 0.15);
   backdrop-filter: blur(8px);
+  box-shadow: 0 22px 60px rgba(0, 0, 0, 0.22);
 }
 
 .logo-light {
   filter: brightness(0) saturate(100%) invert(72%) sepia(28%) saturate(800%) hue-rotate(176deg) brightness(95%);
 }
 
+.section-label-light {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.section-label-light::before {
+  content: '';
+  display: block;
+  width: 4px;
+  height: 22px;
+  background: linear-gradient(180deg, var(--color-brand-light), var(--color-brand));
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+
+.section-label-light span {
+  color: var(--color-brand-light);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.btn-navy {
+  background: linear-gradient(135deg, var(--color-brand-dark), var(--color-brand));
+  color: white;
+  border-radius: 8px;
+  padding: 14px 28px;
+  font-weight: 600;
+  font-size: 14px;
+  transition: transform 0.2s ease, box-shadow 0.3s ease;
+}
+
+.btn-navy:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 12px 35px rgba(47, 117, 184, 0.28);
+}
+
+.contact-form-overlay {
+  background: linear-gradient(
+    135deg,
+    rgba(6, 17, 31, 0.94) 0%,
+    rgba(16, 45, 76, 0.88) 100%
+  );
+}
+
 ::selection {
   background-color: rgba(42, 143, 212, 0.35);
+}
+
+
+.section-flow {
+  position: relative;
+  overflow: hidden;
+}
+
+.section-flow::before {
+  content: '';
+  position: absolute;
+  inset: 0 0 auto;
+  height: 120px;
+  pointer-events: none;
+  background: linear-gradient(180deg, rgba(6, 17, 31, 0.72), transparent);
+  z-index: 0;
+}
+
+.section-flow::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  bottom: -1px;
+  width: min(760px, 80vw);
+  height: 1px;
+  transform: translateX(-50%);
+  background: linear-gradient(90deg, transparent, rgba(108, 168, 255, 0.35), transparent);
+}
+
+.dark-panel {
+  background: linear-gradient(145deg, rgba(10, 32, 53, 0.92), rgba(13, 38, 62, 0.74));
+  border: 1px solid rgba(108, 168, 255, 0.14);
+  box-shadow: 0 28px 80px rgba(0, 0, 0, 0.28);
+}
+
+.card-glass,
+.dark-panel {
+  transition:
+    transform 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+    border-color 0.35s ease,
+    background-color 0.35s ease,
+    box-shadow 0.35s ease;
+}
+
+.btn-primary,
+.btn-outline,
+.btn-navy {
+  will-change: transform;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }

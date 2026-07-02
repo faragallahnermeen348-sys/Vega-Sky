@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion';
 import Navbar from './Navbar';
+import { siteImages } from '../data/siteImages';
 
 const pillars = [
   { num: '01', title: 'Safety First' },
@@ -8,14 +9,19 @@ const pillars = [
   { num: '04', title: 'Continuous Development' },
 ];
 
+const EASE = [0.22, 1, 0.36, 1];
+const ENTRY_TRANSITION = { duration: 0.75, ease: EASE };
+
 export default function Hero() {
   return (
     <section id="home" className="relative min-h-screen flex flex-col overflow-hidden">
-      <div
+      <motion.div
         className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+        initial={{ scale: 1.06 }}
+        animate={{ scale: 1 }}
+        transition={{ duration: 1.6, ease: EASE }}
         style={{
-          backgroundImage:
-            "url('https://images.unsplash.com/photo-1601584115197-04ecc0da31d7?auto=format&fit=crop&q=80&w=1920')",
+          backgroundImage: `url('${siteImages.hero}')`,
         }}
       />
       <div className="absolute inset-0 hero-overlay" />
@@ -27,9 +33,9 @@ export default function Hero() {
         {/* Left column */}
         <div className="w-full lg:w-[52%] space-y-7 text-center lg:text-left">
           <motion.div
-            initial={{ opacity: 0, x: -30 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.7, delay: 0.2 }}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ ...ENTRY_TRANSITION, delay: 0.12 }}
             className="section-tag justify-center lg:justify-start"
           >
             <span className="text-[11px] font-semibold tracking-[0.25em] uppercase text-brand-light">
@@ -38,9 +44,9 @@ export default function Hero() {
           </motion.div>
 
           <motion.h1
-            initial={{ opacity: 0, y: 30 }}
+            initial={{ opacity: 0, y: 26 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.35 }}
+            transition={{ ...ENTRY_TRANSITION, delay: 0.2 }}
             className="text-4xl sm:text-5xl lg:text-[3.4rem] font-bold leading-[1.15] text-white"
           >
             We Guide Your Journey{' '}
@@ -48,9 +54,9 @@ export default function Hero() {
           </motion.h1>
 
           <motion.p
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 24 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.5 }}
+            transition={{ ...ENTRY_TRANSITION, delay: 0.28 }}
             className="text-gray-300/90 text-sm sm:text-[15px] leading-relaxed max-w-lg mx-auto lg:mx-0"
           >
             Comprehensive land transportation solutions across the UAE and Gulf region. A modern
@@ -59,9 +65,9 @@ export default function Hero() {
           </motion.p>
 
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 24 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.65 }}
+            transition={{ ...ENTRY_TRANSITION, delay: 0.36 }}
             className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 pt-2"
           >
             <a
@@ -84,10 +90,10 @@ export default function Hero() {
           {pillars.map((pillar, i) => (
             <motion.div
               key={pillar.num}
-              initial={{ opacity: 0, x: 40 }}
+              initial={{ opacity: 0, x: 28 }}
               animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.6, delay: 0.4 + i * 0.12, ease: [0.22, 1, 0.36, 1] }}
-              className="card-glass rounded-xl px-5 py-4 flex items-center gap-5 hover:bg-white/[0.07] hover:border-white/15 transition-all duration-300 group cursor-default"
+              transition={{ duration: 0.62, delay: 0.3 + i * 0.08, ease: EASE }}
+              className="card-glass rounded-xl px-5 py-4 flex items-center gap-5 hover:bg-white/[0.07] hover:border-white/15 transition-all duration-300 group cursor-default transform-gpu will-change-transform"
             >
               <div className="flex-shrink-0 w-11 h-11 bg-brand rounded-lg flex items-center justify-center shadow-lg shadow-brand/20 group-hover:scale-105 transition-transform duration-300">
                 <span className="text-white text-xs font-bold tracking-wide">{pillar.num}</span>

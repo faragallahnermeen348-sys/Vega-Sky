@@ -43,7 +43,7 @@ export default function Footer() {
             <h4 className="text-[11px] font-semibold uppercase tracking-widest text-brand-light mb-6">Contact</h4>
             <ul className="space-y-3 text-sm text-gray-400">
               <li><a href="tel:+971542242528" className="hover:text-white transition-colors">+971 54 224 2528</a></li>
-              <li><a href="mailto:info@vegasky.ae" className="hover:text-white transition-colors">info@vegasky.ae</a></li>
+              <li><a href="mailto:sales@vegasky.ae" className="hover:text-white transition-colors">sales@vegasky.ae</a></li>
               <li>United Arab Emirates</li>
             </ul>
           </StaggerItem>

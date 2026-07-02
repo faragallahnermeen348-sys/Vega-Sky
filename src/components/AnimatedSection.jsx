@@ -1,16 +1,27 @@
-import { motion } from 'framer-motion';
+import { motion, useReducedMotion } from 'framer-motion';
 
 const EASE = [0.22, 1, 0.36, 1];
 const VIEWPORT = { once: true, amount: 0.15, margin: '0px 0px -80px 0px' };
 
 const directions = {
-  up: { hidden: { opacity: 0, y: 60 }, visible: { opacity: 1, y: 0 } },
-  down: { hidden: { opacity: 0, y: -40 }, visible: { opacity: 1, y: 0 } },
-  left: { hidden: { opacity: 0, x: -60 }, visible: { opacity: 1, x: 0 } },
-  right: { hidden: { opacity: 0, x: 60 }, visible: { opacity: 1, x: 0 } },
-  scale: { hidden: { opacity: 0, scale: 0.88 }, visible: { opacity: 1, scale: 1 } },
-  blur: { hidden: { opacity: 0, y: 40, filter: 'blur(8px)' }, visible: { opacity: 1, y: 0, filter: 'blur(0px)' } },
+  up: { hidden: { opacity: 0, y: 28 }, visible: { opacity: 1, y: 0 } },
+  down: { hidden: { opacity: 0, y: -24 }, visible: { opacity: 1, y: 0 } },
+  left: { hidden: { opacity: 0, x: -32 }, visible: { opacity: 1, x: 0 } },
+  right: { hidden: { opacity: 0, x: 32 }, visible: { opacity: 1, x: 0 } },
+  scale: { hidden: { opacity: 0, scale: 0.96 }, visible: { opacity: 1, scale: 1 } },
+  blur: { hidden: { opacity: 0, y: 24, filter: 'blur(4px)' }, visible: { opacity: 1, y: 0, filter: 'blur(0px)' } },
 };
+
+function getMotionVariant(direction, shouldReduceMotion) {
+  if (shouldReduceMotion) {
+    return {
+      hidden: { opacity: 0 },
+      visible: { opacity: 1 },
+    };
+  }
+
+  return directions[direction] ?? directions.up;
+}
 
 export function ScrollReveal({
   children,
@@ -20,8 +31,9 @@ export function ScrollReveal({
   duration = 0.75,
   as: Tag = 'div',
 }) {
+  const shouldReduceMotion = useReducedMotion();
   const Component = motion[Tag] ?? motion.div;
-  const variant = directions[direction] ?? directions.up;
+  const variant = getMotionVariant(direction, shouldReduceMotion);
 
   return (
     <Component
@@ -30,7 +42,11 @@ export function ScrollReveal({
       whileInView="visible"
       viewport={VIEWPORT}
       variants={variant}
-      transition={{ duration, delay, ease: EASE }}
+      transition={
+        shouldReduceMotion
+          ? { duration: 0.01, delay: 0 }
+          : { duration: Math.min(duration, 0.62), delay, ease: EASE }
+      }
     >
       {children}
     </Component>
@@ -47,7 +63,7 @@ export function SectionHeader({
   showLine = true,
 }) {
   const alignClass = align === 'center' ? 'text-center mx-auto' : 'text-left';
-  const titleClass = dark ? 'text-white' : 'text-navy-dark';
+  const titleClass = dark ? 'text-white' : 'text-navy-heading';
   const subtitleClass = dark ? 'text-gray-400' : 'text-gray-500';
 
   return (
@@ -91,6 +107,8 @@ export default function AnimatedSection({ children, className = '', id }) {
 }
 
 export function StaggerContainer({ children, className = '', stagger = 0.1, delay = 0 }) {
+  const shouldReduceMotion = useReducedMotion();
+
   return (
     <motion.div
       className={className}
@@ -99,7 +117,11 @@ export function StaggerContainer({ children, className = '', stagger = 0.1, dela
       viewport={VIEWPORT}
       variants={{
         hidden: {},
-        visible: { transition: { staggerChildren: stagger, delayChildren: delay } },
+        visible: {
+          transition: shouldReduceMotion
+            ? { staggerChildren: 0, delayChildren: 0 }
+            : { staggerChildren: stagger, delayChildren: delay },
+        },
       }}
     >
       {children}
@@ -108,7 +130,8 @@ export function StaggerContainer({ children, className = '', stagger = 0.1, dela
 }
 
 export function StaggerItem({ children, className = '', direction = 'up' }) {
-  const variant = directions[direction] ?? directions.up;
+  const shouldReduceMotion = useReducedMotion();
+  const variant = getMotionVariant(direction, shouldReduceMotion);
 
   return (
     <motion.div
@@ -117,7 +140,9 @@ export function StaggerItem({ children, className = '', direction = 'up' }) {
         hidden: variant.hidden,
         visible: {
           ...variant.visible,
-          transition: { duration: 0.65, ease: EASE },
+          transition: shouldReduceMotion
+            ? { duration: 0.01 }
+            : { duration: 0.58, ease: EASE },
         },
       }}
     >

@@ -1,5 +1,6 @@
 import Hero from './components/Hero';
 import About from './components/About';
+import WhyChooseUs from './components/WhyChooseUs';
 import Services from './components/Services';
 import Coverage from './components/Coverage';
 import Gallery from './components/Gallery';
@@ -12,6 +13,7 @@ export default function App() {
     <div className="min-h-screen bg-navy-deep">
       <Hero />
       <About />
+      <WhyChooseUs />
       <Services />
       <Coverage />
       <Gallery />

@@ -1,15 +1,9 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import AnimatedSection, { SectionHeader, ScrollReveal, StaggerContainer, StaggerItem } from './AnimatedSection';
+import { galleryImages } from '../data/siteImages';
 
-const images = [
-  { id: 1, src: 'https://images.unsplash.com/photo-1601584115197-04ecc0da31d7?auto=format&fit=crop&q=80&w=800', alt: 'Heavy duty truck on highway', category: 'Fleet' },
-  { id: 2, src: 'https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&q=80&w=800', alt: 'Warehouse logistics operations', category: 'Operations' },
-  { id: 3, src: 'https://images.unsplash.com/photo-1519003722824-194d4455a60c?auto=format&fit=crop&q=80&w=800', alt: 'Truck fleet at depot', category: 'Fleet' },
-  { id: 4, src: 'https://images.unsplash.com/photo-1494412519320-aa613dfb7738?auto=format&fit=crop&q=80&w=800', alt: 'Container transport', category: 'Cargo' },
-  { id: 5, src: 'https://images.unsplash.com/photo-1449965408869-eaa3f722e40d?auto=format&fit=crop&q=80&w=800', alt: 'Cross-border logistics route', category: 'Routes' },
-  { id: 6, src: 'https://images.unsplash.com/photo-1578575437130-527eed3abbcd?auto=format&fit=crop&q=80&w=800', alt: 'Professional driver and truck', category: 'Team' },
-];
+const fallbackImage = '/logo.png';
 
 const categories = ['All', 'Fleet', 'Operations', 'Cargo', 'Routes', 'Team'];
 
@@ -18,11 +12,13 @@ export default function Gallery() {
   const [lightbox, setLightbox] = useState(null);
 
   const filtered =
-    activeCategory === 'All' ? images : images.filter((img) => img.category === activeCategory);
+    activeCategory === 'All'
+      ? galleryImages
+      : galleryImages.filter((img) => img.category === activeCategory);
 
   return (
-    <AnimatedSection id="gallery" className="py-24 bg-navy-deep">
-      <div className="max-w-7xl mx-auto px-6 lg:px-10">
+    <AnimatedSection id="gallery" className="section-flow py-24 bg-navy-deep">
+      <div className="max-w-7xl mx-auto px-6 lg:px-10 relative z-10">
         <SectionHeader
           label="Gallery"
           title="Our fleet, routes & operations in action"
@@ -35,15 +31,16 @@ export default function Gallery() {
               key={cat}
               type="button"
               onClick={() => setActiveCategory(cat)}
-              className={`relative px-5 py-2 text-xs font-semibold uppercase tracking-wider rounded-full transition-all duration-300 ${
-                activeCategory === cat ? 'text-white' : 'text-gray-400 card-glass hover:text-white'
-              }`}
+              className={
+                'relative px-5 py-2 text-xs font-semibold uppercase tracking-wider rounded-full transition-all duration-300 ' +
+                (activeCategory === cat ? 'text-white' : 'text-gray-400 card-glass hover:text-white')
+              }
             >
               {activeCategory === cat && (
                 <motion.span
                   layoutId="gallery-filter"
                   className="absolute inset-0 bg-brand rounded-full"
-                  transition={{ type: 'spring', stiffness: 400, damping: 30 }}
+                  transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
                 />
               )}
               <span className="relative z-10">{cat}</span>
@@ -54,16 +51,12 @@ export default function Gallery() {
         <StaggerContainer key={activeCategory} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5" stagger={0.08}>
           {filtered.map((image) => (
             <StaggerItem key={image.id} direction="scale">
-              <div
-                className="group relative aspect-[4/3] rounded-xl overflow-hidden cursor-pointer border border-white/10 hover:border-brand/30 transition-all duration-300"
+              <button
+                type="button"
+                className="group relative aspect-[4/3] rounded-xl overflow-hidden cursor-pointer border border-white/10 hover:border-brand/30 transition-all duration-300 text-left w-full bg-navy-card transform-gpu will-change-transform hover:-translate-y-1"
                 onClick={() => setLightbox(image)}
               >
-                <img
-                  src={image.src}
-                  alt={image.alt}
-                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                  loading="lazy"
-                />
+                <GalleryImage image={image} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
                 <div className="absolute inset-0 bg-gradient-to-t from-navy-deep/90 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                 <div className="absolute bottom-0 left-0 right-0 p-5 translate-y-4 group-hover:translate-y-0 opacity-0 group-hover:opacity-100 transition-all duration-500">
                   <span className="text-[10px] uppercase tracking-widest text-brand-light font-semibold">
@@ -71,7 +64,7 @@ export default function Gallery() {
                   </span>
                   <p className="text-white text-sm font-medium mt-1">{image.alt}</p>
                 </div>
-              </div>
+              </button>
             </StaggerItem>
           ))}
         </StaggerContainer>
@@ -92,21 +85,46 @@ export default function Gallery() {
               className="absolute top-6 right-6 w-10 h-10 rounded-full card-glass text-white flex items-center justify-center hover:bg-white/10"
               onClick={() => setLightbox(null)}
             >
-              ✕
+              x
             </button>
-            <motion.img
+            <motion.div
               initial={{ scale: 0.85, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.85, opacity: 0 }}
-              transition={{ type: 'spring', damping: 25 }}
-              src={lightbox.src.replace('w=800', 'w=1400')}
-              alt={lightbox.alt}
-              className="max-w-5xl max-h-[80vh] object-contain rounded-2xl"
+              transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+              className="max-w-5xl max-h-[80vh] w-full"
               onClick={(e) => e.stopPropagation()}
-            />
+            >
+              <GalleryImage
+                image={lightbox}
+                className="max-w-full max-h-[80vh] mx-auto object-contain rounded-xl"
+              />
+            </motion.div>
           </motion.div>
         )}
       </AnimatePresence>
     </AnimatedSection>
+  );
+}
+
+function GalleryImage({ image, className }) {
+  const [failed, setFailed] = useState(false);
+
+  if (failed) {
+    return (
+      <div className="w-full h-full bg-navy-card flex items-center justify-center p-8">
+        <img src={fallbackImage} alt="Vega Sky Transport" className="max-h-24 max-w-[70%] object-contain logo-light opacity-80" />
+      </div>
+    );
+  }
+
+  return (
+    <img
+      src={image.src}
+      alt={image.alt}
+      className={className}
+      loading="lazy"
+      onError={() => setFailed(true)}
+    />
   );
 }

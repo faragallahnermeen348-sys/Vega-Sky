@@ -41,8 +41,8 @@ const services = [
 
 export default function Services() {
   return (
-    <AnimatedSection id="services" className="py-24 bg-navy-deep relative overflow-hidden">
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_right,rgba(42,143,212,0.08),transparent_60%)]" />
+    <AnimatedSection id="services" className="section-flow py-24 bg-navy-deep relative">
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_right,rgba(47,117,184,0.16),transparent_60%)]" />
 
       <div className="max-w-7xl mx-auto px-6 lg:px-10 relative">
         <SectionHeader
